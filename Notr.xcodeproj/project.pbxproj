@@ -13,6 +13,8 @@
 		64BDC45325DA9D4700CABE73 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 64BDC45225DA9D4700CABE73 /* Preview Assets.xcassets */; };
 		64BDC45E25DA9D4700CABE73 /* NotrTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64BDC45D25DA9D4700CABE73 /* NotrTests.swift */; };
 		64BDC46925DA9D4700CABE73 /* NotrUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64BDC46825DA9D4700CABE73 /* NotrUITests.swift */; };
+		64BDC47A25DAA90B00CABE73 /* TrackableScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64BDC47925DAA90B00CABE73 /* TrackableScrollView.swift */; };
+		64BDC47F25DACA4400CABE73 /* BlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64BDC47E25DACA4400CABE73 /* BlurView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,6 +47,8 @@
 		64BDC46425DA9D4700CABE73 /* NotrUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NotrUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		64BDC46825DA9D4700CABE73 /* NotrUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotrUITests.swift; sourceTree = "<group>"; };
 		64BDC46A25DA9D4700CABE73 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		64BDC47925DAA90B00CABE73 /* TrackableScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackableScrollView.swift; sourceTree = "<group>"; };
+		64BDC47E25DACA4400CABE73 /* BlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +101,8 @@
 			children = (
 				64BDC44B25DA9D4600CABE73 /* NotrApp.swift */,
 				64BDC44D25DA9D4600CABE73 /* ContentView.swift */,
+				64BDC47E25DACA4400CABE73 /* BlurView.swift */,
+				64BDC47925DAA90B00CABE73 /* TrackableScrollView.swift */,
 				64BDC44F25DA9D4700CABE73 /* Assets.xcassets */,
 				64BDC45425DA9D4700CABE73 /* Info.plist */,
 				64BDC45125DA9D4700CABE73 /* Preview Content */,
@@ -259,6 +265,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				64BDC47A25DAA90B00CABE73 /* TrackableScrollView.swift in Sources */,
+				64BDC47F25DACA4400CABE73 /* BlurView.swift in Sources */,
 				64BDC44E25DA9D4600CABE73 /* ContentView.swift in Sources */,
 				64BDC44C25DA9D4600CABE73 /* NotrApp.swift in Sources */,
 			);
