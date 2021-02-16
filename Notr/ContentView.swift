@@ -22,15 +22,15 @@ struct ContentView: View {
 //                            .padding(.top, 80)
                 Spacer(minLength: 50)
                 
-                HStack(alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/){
+//                HStack(alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/){
 //                    TextField("Search Notr...", text: $text)
 //                        .textFieldStyle(RoundedBorderTextFieldStyle())
 //                        .padding()
 //                        .padding(.top)
 //                        .padding(.bottom, -10)
                     
-                    Spacer()
-                }
+//                    Spacer()
+//                }
                 
                 
                 ForEach(0..<13){ i in
@@ -150,7 +150,7 @@ struct ContentView: View {
             return 109
         }
         else if(contentOffset > 0){
-            if(contentOffset >= 49){
+            if(contentOffset >= 60){
                 return 49
             }
             else{
