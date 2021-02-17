@@ -10,9 +10,13 @@ import SwiftUI
 struct ContentView: View {
     
     @State private var text = ""
+    init(){
+        UITextView.appearance().backgroundColor = .clear
+    }
     @State private var scrollContentOffset : CGFloat = -300
     @State private var buttonExpanded = false
     @State private var headerHeightIncreased = false
+    @State private var isModal = false
     
     var body: some View {
         ZStack{
@@ -45,12 +49,11 @@ struct ContentView: View {
                 }
                 .padding(.top)
                 
-//                TextField("Search Notr...", text: $text)
-//                    .textFieldStyle(RoundedBorderTextFieldStyle())
-//                    .padding()
-//                    .padding(.bottom, 45)
-                
-                
+                TextField("Search Notr...", text: .constant("placeholder"))
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .padding()
+                    .padding(.bottom, 45)
+
             }
 //            .padding(.top, 50)
 //            .ignoresSafeArea(/*@START_MENU_TOKEN@*/.keyboard/*@END_MENU_TOKEN@*/, edges: /*@START_MENU_TOKEN@*/.bottom/*@END_MENU_TOKEN@*/)
@@ -60,11 +63,12 @@ struct ContentView: View {
                 HStack{
                     Spacer()
                     Button(action: {
-                        buttonExpanded.toggle()
-
+//                        buttonExpanded.toggle()
+                        isModal = true
                     }, label: {
                         BlurView(style: .systemUltraThinMaterial)
-                            .frame(width: buttonExpanded ? UIScreen.main.bounds.width-22 : 70, height: buttonExpanded ? UIScreen.main.bounds.height-150 :  70, alignment: .center)
+//                            .frame(width: buttonExpanded ? UIScreen.main.bounds.width-22 : 70, height: buttonExpanded ? UIScreen.main.bounds.height-150 :  70, alignment: .center)
+                            .frame(width: 70, height: 70, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
                             .cornerRadius(35)
                             .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/, x: 0, y: 5)
                             .padding()
@@ -82,6 +86,49 @@ struct ContentView: View {
                 Spacer()
             }
             .edgesIgnoringSafeArea(.all)
+            
+            BlurView(style: .systemUltraThinMaterial)
+                .cornerRadius(45) //fix this for devices with rectangular screens.
+                .overlay(
+                    ZStack{
+                        TextEditor(text: $text)
+                            .padding(.leading, 20)
+                            .padding(.top, 90)
+//                            .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+
+                        VStack{
+                            BlurView(style: .systemUltraThinMaterial)
+//                            RoundedRectangle(cornerRadius: /*@START_MENU_TOKEN@*/25.0/*@END_MENU_TOKEN@*/)
+//                                .foregroundColor(.clear)
+                                .frame(width: UIScreen.main.bounds.width, height: 100, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                                .overlay(
+                                    Image(systemName: "chevron.compact.down")
+                                        .font(.system(size: 40))
+                                        .foregroundColor(.gray)
+                                        .padding(.top)
+                                )
+                                Spacer()
+                        }
+                        
+                        
+                        
+//                        Divider()
+                            
+//
+//
+//                        Spacer()
+                        
+//                        RoundedRectangle(cornerRadius: 20)
+//                            .frame(width: 300, height: 300, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+//                            .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
+                        
+                    }
+                    
+                )
+                .edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
+                .offset(x: 0, y: isModal ? 0 : UIScreen.main.bounds.height)
+                .animation(.spring())
+                
         }
     }
     
@@ -89,8 +136,6 @@ struct ContentView: View {
     private var header : some View{
         //MARK: The Header
         BlurView(style: .systemUltraThinMaterial)
-//                    .frame(width: UIScreen.main.bounds.width, height: isScrollPositionChanged(contentOffset: self.scrollContentOffset) ? 109 : 49)
-//                    .frame(width: UIScreen.main.bounds.width, height: self.scrollContentOffset)
             .frame(width: UIScreen.main.bounds.width, height: checkHeaderHeight(contentOffset: scrollContentOffset))
             .overlay(
                 HStack{
