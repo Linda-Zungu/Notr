@@ -28,17 +28,6 @@ struct ContentView: View {
 //                            .padding(.top, 80)
                 Spacer(minLength: 50)
                 
-//                HStack(alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/){
-//                    TextField("Search Notr...", text: $text)
-//                        .textFieldStyle(RoundedBorderTextFieldStyle())
-//                        .padding()
-//                        .padding(.top)
-//                        .padding(.bottom, -10)
-                    
-//                    Spacer()
-//                }
-                
-                
                 ForEach(0..<13){ i in
                     RoundedRectangle(cornerRadius: /*@START_MENU_TOKEN@*/25.0/*@END_MENU_TOKEN@*/)
                         .frame(width: 350, height: 190, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
@@ -184,10 +173,7 @@ struct ContentView: View {
                         .font(.system(size: 40))
                         .foregroundColor(.gray)
                         .padding(.top)
-                    
-                    Text("\(offset.height)")
                 }
-                
             )
     }
     
