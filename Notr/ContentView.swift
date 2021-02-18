@@ -12,7 +12,7 @@ struct ContentView: View {
     @State private var text = ""
     init(){
         UITextView.appearance().backgroundColor = .clear
-        UITextView.appearance().contentInset = .init(top: 90, left: 0, bottom: 350, right: 0)
+        UITextView.appearance().contentInset = .init(top: 120, left: 0, bottom: 350, right: 0)
     }
     @State private var scrollContentOffset : CGFloat = -300
     @State private var buttonExpanded = false
@@ -60,16 +60,15 @@ struct ContentView: View {
 //            .padding(.top, 50)
 //            .ignoresSafeArea(/*@START_MENU_TOKEN@*/.keyboard/*@END_MENU_TOKEN@*/, edges: /*@START_MENU_TOKEN@*/.bottom/*@END_MENU_TOKEN@*/)
 //            .edgesIgnoringSafeArea(.top)
+            
             VStack{
                 Spacer()
                 HStack{
                     Spacer()
                     Button(action: {
-//                        buttonExpanded.toggle()
                         isModal = true
                     }, label: {
                         BlurView(style: .systemUltraThinMaterial)
-//                            .frame(width: buttonExpanded ? UIScreen.main.bounds.width-22 : 70, height: buttonExpanded ? UIScreen.main.bounds.height-150 :  70, alignment: .center)
                             .frame(width: 70, height: 70, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
                             .cornerRadius(35)
                             .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/, x: 0, y: 5)
@@ -85,8 +84,8 @@ struct ContentView: View {
                     })
                     .animation(.spring(response: 0.3, dampingFraction: 0.63, blendDuration: 0.3))
                 }
-            }.edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
-            
+            }
+            .edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
             
             
             VStack{
@@ -95,50 +94,24 @@ struct ContentView: View {
             }
             .edgesIgnoringSafeArea(.all)
             
+            
             BlurView(style: .systemUltraThinMaterial)
-//                .cornerRadius(45) //fix this for devices with rectangular screens.
                 .overlay(
                     ZStack{
                         TextEditor(text: $text)
                             .padding(.leading, 20)
-//                            .padding(.top, 90)
-//                            .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
 
                         VStack{
-                            BlurView(style: .systemUltraThinMaterial)
-                                .saturation(2.0)
-                                .frame(width: UIScreen.main.bounds.width, height: 100, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
-                                .gesture(
-                                    DragGesture()
-                                        .onChanged { gesture in
-                                            self.offset = gesture.translation
-                                        }
-                                        .onEnded { _ in
-                                            if(self.offset.height) > 100 {
-                                                offset.height = .zero
-                                                isModal = false
-                                            }
-                                            else{
-                                                self.offset = .zero
-                                            }
-                                        }
-                                )
-                                .overlay(
-                                    Image(systemName: "chevron.compact.down")
-                                        .font(.system(size: 40))
-                                        .foregroundColor(.gray)
-                                        .padding(.top)
-                                )
-                                Spacer()
+                            sheetDragArea
+                            Spacer()
                         }
                     }
                 )
-                
-                .cornerRadius(50)
-                .edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
+                .cornerRadius(50) //fix this for devices with rectangular screens.
                 .offset(x: 0, y: isModal ? 0 : UIScreen.main.bounds.height)
-                .offset(x: 0, y: offset.height)
+                .offset(x: 0, y: sheetDragUp() ? 0 : offset.height)
                 .animation(.spring())
+                .edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
                 
                 
         }
@@ -146,7 +119,6 @@ struct ContentView: View {
     
     //MARK: SubViews
     private var header : some View{
-        //MARK: The Header
         BlurView(style: .systemUltraThinMaterial)
             .frame(width: UIScreen.main.bounds.width, height: checkHeaderHeight(contentOffset: scrollContentOffset))
             .overlay(
@@ -178,7 +150,6 @@ struct ContentView: View {
                                 .padding(.horizontal)
                                 .animation(.easeInOut(duration: 0.25))
                                 
-                            
                             Spacer()
                         }
                     }
@@ -186,6 +157,38 @@ struct ContentView: View {
             )
             .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
             .animation(.easeInOut(duration: 0))
+    }
+    
+    private var sheetDragArea : some View {
+        BlurView(style: .systemUltraThinMaterial)
+            .saturation(2.0)
+            .frame(width: UIScreen.main.bounds.width, height: 100, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+            .gesture(
+                DragGesture()
+                    .onChanged { gesture in
+                        self.offset = gesture.translation
+                    }
+                    .onEnded { _ in
+                        if(self.offset.height > 100) {
+                            offset.height = .zero
+                            isModal = false
+                        }
+                        else{
+                            self.offset.height = .zero
+                        }
+                    }
+            )
+            .overlay(
+                VStack{
+                    Image(systemName: "chevron.compact.down")
+                        .font(.system(size: 40))
+                        .foregroundColor(.gray)
+                        .padding(.top)
+                    
+                    Text("\(offset.height)")
+                }
+                
+            )
     }
     
     
@@ -231,6 +234,15 @@ struct ContentView: View {
         dateFormatter.locale = Locale.current
         
         return dateFormatter.string(from: Date())
+    }
+    
+    private func sheetDragUp() -> Bool {
+        if(self.offset.height < 0){
+            return true
+        }
+        else{
+            return false
+        }
     }
 }
 
