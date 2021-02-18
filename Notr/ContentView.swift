@@ -12,6 +12,7 @@ struct ContentView: View {
     @State private var text = ""
     init(){
         UITextView.appearance().backgroundColor = .clear
+        UITextView.appearance().contentInset = .init(top: 90, left: 0, bottom: 350, right: 0)
     }
     @State private var scrollContentOffset : CGFloat = -300
     @State private var buttonExpanded = false
@@ -73,6 +74,12 @@ struct ContentView: View {
                             .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/, x: 0, y: 5)
                             .padding()
                             .offset(x: -4, y: 0)
+                            .overlay(
+                                Image(systemName: "plus")
+                                    .offset(x: -4, y: 0)
+                                    .font(.system(size: 30))
+                                    .foregroundColor(.orange)
+                            )
                             
                     })
                     .animation(.spring(response: 0.3, dampingFraction: 0.63, blendDuration: 0.3))
@@ -88,18 +95,17 @@ struct ContentView: View {
             .edgesIgnoringSafeArea(.all)
             
             BlurView(style: .systemUltraThinMaterial)
-                .cornerRadius(45) //fix this for devices with rectangular screens.
+//                .cornerRadius(45) //fix this for devices with rectangular screens.
                 .overlay(
                     ZStack{
                         TextEditor(text: $text)
                             .padding(.leading, 20)
-                            .padding(.top, 90)
+//                            .padding(.top, 90)
 //                            .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
 
                         VStack{
                             BlurView(style: .systemUltraThinMaterial)
-//                            RoundedRectangle(cornerRadius: /*@START_MENU_TOKEN@*/25.0/*@END_MENU_TOKEN@*/)
-//                                .foregroundColor(.clear)
+                                .saturation(2.0)
                                 .frame(width: UIScreen.main.bounds.width, height: 100, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
                                 .overlay(
                                     Image(systemName: "chevron.compact.down")
@@ -109,22 +115,9 @@ struct ContentView: View {
                                 )
                                 Spacer()
                         }
-                        
-                        
-                        
-//                        Divider()
-                            
-//
-//
-//                        Spacer()
-                        
-//                        RoundedRectangle(cornerRadius: 20)
-//                            .frame(width: 300, height: 300, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
-//                            .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
-                        
                     }
-                    
                 )
+                .cornerRadius(50)
                 .edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
                 .offset(x: 0, y: isModal ? 0 : UIScreen.main.bounds.height)
                 .animation(.spring())
