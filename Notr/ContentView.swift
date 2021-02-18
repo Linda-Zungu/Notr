@@ -18,6 +18,7 @@ struct ContentView: View {
     @State private var buttonExpanded = false
     @State private var headerHeightIncreased = false
     @State private var isModal = false
+    @State private var offset = CGSize.zero
     
     var body: some View {
         ZStack{
@@ -107,6 +108,21 @@ struct ContentView: View {
                             BlurView(style: .systemUltraThinMaterial)
                                 .saturation(2.0)
                                 .frame(width: UIScreen.main.bounds.width, height: 100, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                                .gesture(
+                                    DragGesture()
+                                        .onChanged { gesture in
+                                            self.offset = gesture.translation
+                                        }
+                                        .onEnded { _ in
+                                            if(self.offset.height) > 100 {
+                                                offset.height = .zero
+                                                isModal = false
+                                            }
+                                            else{
+                                                self.offset = .zero
+                                            }
+                                        }
+                                )
                                 .overlay(
                                     Image(systemName: "chevron.compact.down")
                                         .font(.system(size: 40))
@@ -117,10 +133,13 @@ struct ContentView: View {
                         }
                     }
                 )
+                
                 .cornerRadius(50)
                 .edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
                 .offset(x: 0, y: isModal ? 0 : UIScreen.main.bounds.height)
+                .offset(x: 0, y: offset.height)
                 .animation(.spring())
+                
                 
         }
     }
