@@ -98,9 +98,10 @@ struct ContentView: View {
                 )
                 .cornerRadius(50) //fix this for devices with rectangular screens.
                 .offset(x: 0, y: isModal ? 0 : UIScreen.main.bounds.height)
-                .offset(x: 0, y: sheetDragUp() ? 0 : offset.height)
+                .offset(x: 0, y: isSheetDraggedUp() ? 0 : offset.height)
                 .animation(.spring())
                 .edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
+                .shadow(radius: 1)
                 
                 
         }
@@ -167,12 +168,24 @@ struct ContentView: View {
                         }
                     }
             )
+            .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
             .overlay(
-                VStack{
+                ZStack{
                     Image(systemName: "chevron.compact.down")
                         .font(.system(size: 40))
                         .foregroundColor(.gray)
                         .padding(.top)
+                    
+                    HStack{
+                        Spacer()
+                        
+                        Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/, label: {
+                            Text("Done")
+                                .bold()
+                                .padding()
+                                .padding(.top, 10)
+                        })
+                    }
                 }
             )
     }
@@ -222,7 +235,7 @@ struct ContentView: View {
         return dateFormatter.string(from: Date())
     }
     
-    private func sheetDragUp() -> Bool {
+    private func isSheetDraggedUp() -> Bool {
         if(self.offset.height < 0){
             return true
         }
