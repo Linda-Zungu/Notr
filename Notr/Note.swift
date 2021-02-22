@@ -10,9 +10,11 @@ import Foundation
 class Note: Identifiable, Codable{
     var id = UUID()
     let noteText : String
+    let noteDate : String
     
-    init(text: String){
+    init(text: String, date: String){
         self.noteText = text
+        self.noteDate = "\(Notes().getDate())"
     }
 }
 
@@ -34,5 +36,15 @@ class Notes : ObservableObject{
         if let encoded = try? JSONEncoder().encode(notes){
             UserDefaults.standard.set(encoded, forKey: "SavedData")
         }
+    }
+    
+    func getDate() -> String{
+        let date = DateFormatter()
+        
+        date.dateStyle = .medium
+        date.timeStyle = .short
+        date.locale = Locale.current
+        
+        return date.string(from: Date())
     }
 }
