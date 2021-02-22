@@ -29,13 +29,12 @@ struct ContentView: View {
     
     var body: some View {
         ZStack{
-            
             TrackableScrollView(.vertical, showIndicators: true, contentOffset: $scrollContentOffset){
 //                Text("\(self.scrollContentOffset)")
 //                            .padding(.top, 80)
                 Spacer(minLength: 50)
                 
-//                ForEach(0..<allNotes.count){ i in
+//                ForEach(0..<29){ i in
                 ForEach(0..<notesList.notes.count, id: \.self) { i in
                     RoundedRectangle(cornerRadius: /*@START_MENU_TOKEN@*/25.0/*@END_MENU_TOKEN@*/)
                         .frame(width: 350, height: 190, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
@@ -45,7 +44,27 @@ struct ContentView: View {
 //                        )
                         .overlay(
 //                            Text("\(allNotes[i].noteText)")
-                            Text("\(notesList.notes[i].noteText)")
+                            VStack{
+                                HStack{
+                                    Text("\(notesList.notes[i].noteDate)")
+                                        .bold()
+                                        .foregroundColor(.white)
+                                        .font(.system(size: 15))
+                                        .shadow(radius: 1)
+                                        .padding()
+                                    
+                                    Spacer()
+                                        
+                                }
+                                HStack{
+                                    Text("\(notesList.notes[i].noteText)")
+                                        .padding(.horizontal)
+                                    Spacer()
+                                }
+                                
+                                Spacer()
+                            }
+                            
                         )
                         .cornerRadius(25)
                         .shadow(color: .gray /*Color.red.opacity(0.7)*/,radius: 15, x: 0, y: 10)
@@ -129,7 +148,7 @@ struct ContentView: View {
                         }
                     }
                 )
-                .cornerRadius(45) //fix this for devices with rectangular screens.
+                .cornerRadius(47.33) //fix this for devices with rectangular screens.
                 .offset(x: 0, y: isModal ? 0 : UIScreen.main.bounds.height)
                 .offset(x: 0, y: isSheetDraggedUp() ? 0 : offset.height)
                 .animation(.spring())
@@ -216,7 +235,7 @@ struct ContentView: View {
                         Button(action: {
 //                            notesList.notes.append(notesList)
                             
-                            notesList.notes.append(Note(text: text))
+                            notesList.notes.append(Note(text: text, date: "date"))
 //                            print(notesList.notes[notesList.notes.count-1].noteText)
                             notesList.save()
 //                            allNotes.append(Note(noteText: text))
