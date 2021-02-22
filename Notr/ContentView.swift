@@ -7,9 +7,13 @@
 
 import SwiftUI
 
+//struct Note : Identifiable{
+//    var id = UUID()
+//    let noteText: String
+//}
 struct ContentView: View {
     
-    @State private var text = ""
+    @State private var text = "Start Note..."
     init(){
         UITextView.appearance().backgroundColor = .clear
         UITextView.appearance().contentInset = .init(top: 120, left: 0, bottom: 350, right: 0)
@@ -20,6 +24,9 @@ struct ContentView: View {
     @State private var isModal = false
     @State private var offset = CGSize.zero
     
+//    @State private var allNotes = [Note]()
+    var notesList = Notes()
+    
     var body: some View {
         ZStack{
             
@@ -28,14 +35,20 @@ struct ContentView: View {
 //                            .padding(.top, 80)
                 Spacer(minLength: 50)
                 
-                ForEach(0..<13){ i in
+//                ForEach(0..<allNotes.count){ i in
+                ForEach(0..<notesList.notes.count, id: \.self) { i in
                     RoundedRectangle(cornerRadius: /*@START_MENU_TOKEN@*/25.0/*@END_MENU_TOKEN@*/)
                         .frame(width: 350, height: 190, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
-                        .foregroundColor(.clear)
-                        .background(LinearGradient(gradient: Gradient(colors: [Color.yellow.opacity(0.7), Color.init(red: 0.6, green: 0.0, blue: 0.1).opacity(0.85)]), startPoint: .top, endPoint: .bottom)
+//                        .foregroundColor(.clear)
+                        .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+//                        .background(LinearGradient(gradient: Gradient(colors: [Color.yellow.opacity(0.7), Color.init(red: 0.6, green: 0.0, blue: 0.1).opacity(0.85)]), startPoint: .top, endPoint: .bottom)
+//                        )
+                        .overlay(
+//                            Text("\(allNotes[i].noteText)")
+                            Text("\(notesList.notes[i].noteText)")
                         )
                         .cornerRadius(25)
-                        .shadow(color: Color.red.opacity(0.7),radius: 15, x: 0, y: 10)
+                        .shadow(color: .gray /*Color.red.opacity(0.7)*/,radius: 15, x: 0, y: 10)
                         .padding()
                 }
                 .padding(.top)
@@ -89,6 +102,26 @@ struct ContentView: View {
                     ZStack{
                         TextEditor(text: $text)
                             .padding(.leading, 20)
+                            .foregroundColor(self.text == "Start Note..." ? .gray : .primary)
+                            .onAppear {
+                                // remove the placeholder text when keyboard appears
+                                NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { (noti) in
+                                    withAnimation {
+                                        if self.text == "Start Note..." {
+                                            self.text = ""
+                                        }
+                                    }
+                                }
+                                
+                                // put back the placeholder text if the user dismisses the keyboard without adding any text
+                                NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { (noti) in
+                                    withAnimation {
+                                        if self.text == "" {
+                                            self.text = "Start Note..."
+                                        }
+                                    }
+                                }
+                            }
 
                         VStack{
                             sheetDragArea
@@ -96,12 +129,12 @@ struct ContentView: View {
                         }
                     }
                 )
-                .cornerRadius(50) //fix this for devices with rectangular screens.
+                .cornerRadius(45) //fix this for devices with rectangular screens.
                 .offset(x: 0, y: isModal ? 0 : UIScreen.main.bounds.height)
                 .offset(x: 0, y: isSheetDraggedUp() ? 0 : offset.height)
                 .animation(.spring())
                 .edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
-                .shadow(radius: 1)
+                .shadow(radius: 30)
                 
                 
         }
@@ -165,10 +198,11 @@ struct ContentView: View {
                         }
                         else{
                             self.offset.height = .zero
+//                            isModal = false
                         }
                     }
             )
-            .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
+            .shadow(radius: 1)
             .overlay(
                 ZStack{
                     Image(systemName: "chevron.compact.down")
@@ -179,7 +213,20 @@ struct ContentView: View {
                     HStack{
                         Spacer()
                         
-                        Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/, label: {
+                        Button(action: {
+//                            notesList.notes.append(notesList)
+                            
+                            notesList.notes.append(Note(text: text))
+//                            print(notesList.notes[notesList.notes.count-1].noteText)
+                            notesList.save()
+//                            allNotes.append(Note(noteText: text))
+//                            offset.height = .zero
+                            isModal = false
+                            text = "Start Note..."
+//                            for i in 0..<allNotes.count{
+//                                print("\(i): \(allNotes[i].noteText)")
+//                            }
+                        }, label: {
                             Text("Done")
                                 .bold()
                                 .padding()
