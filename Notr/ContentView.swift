@@ -18,6 +18,7 @@ struct ContentView: View {
     @State private var buttonExpanded = false
     @State private var headerHeightIncreased = false
     @State private var isModal = false
+    @State private var isEditing = false
     @State private var offset = CGSize.zero
     @State private var selectedButtonIndex = 0
     
@@ -34,6 +35,7 @@ struct ContentView: View {
                 ForEach(0..<notesList.notes.count, id: \.self) { i in
                     Button(action: {
                         self.isModal = true
+                        self.isEditing = true
                         self.text = notesList.notes[i].noteText
                         self.selectedButtonIndex = i
                     }, label: {
@@ -240,6 +242,7 @@ struct ContentView: View {
 //                            offset.height = .zero
                             isModal = false
                             text = "Start Note..."
+                            self.isEditing = false
                         }, label: {
                             Text("Done")
                                 .bold()
@@ -306,9 +309,17 @@ struct ContentView: View {
     }
     
     private func editingNotesList(){
-        if(text != notesList.notes[selectedButtonIndex].noteText){
-            notesList.notes.remove(at: self.selectedButtonIndex)
+        if(notesList.notes.isEmpty){
             addNote(textNote: text)
+        }
+        else{
+            if(text != notesList.notes[selectedButtonIndex].noteText && isEditing == true){
+                notesList.notes.remove(at: self.selectedButtonIndex)
+                addNote(textNote: text)
+            }
+            else{
+                addNote(textNote: text)
+            }
         }
     }
     
