@@ -23,6 +23,7 @@ struct ContentView: View {
     @State private var headerHeightIncreased = false
     @State private var isModal = false
     @State private var offset = CGSize.zero
+    @State private var selectedButtonIndex = 0
     
 //    @State private var allNotes = [Note]()
     var notesList = Notes()
@@ -36,39 +37,44 @@ struct ContentView: View {
                 
 //                ForEach(0..<29){ i in
                 ForEach(0..<notesList.notes.count, id: \.self) { i in
-                    RoundedRectangle(cornerRadius: /*@START_MENU_TOKEN@*/25.0/*@END_MENU_TOKEN@*/)
-                        .frame(width: 350, height: 190, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
-//                        .foregroundColor(.clear)
-                        .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
-//                        .background(LinearGradient(gradient: Gradient(colors: [Color.yellow.opacity(0.7), Color.init(red: 0.6, green: 0.0, blue: 0.1).opacity(0.85)]), startPoint: .top, endPoint: .bottom)
-//                        )
-                        .overlay(
-//                            Text("\(allNotes[i].noteText)")
-                            VStack{
-                                HStack{
-                                    Text("\(notesList.notes[i].noteDate)")
-                                        .bold()
-                                        .foregroundColor(.white)
-                                        .font(.system(size: 15))
-                                        .shadow(radius: 1)
-                                        .padding()
+                    Button(action: {
+                        self.isModal = true
+                        self.text = notesList.notes[i].noteText
+                        self.selectedButtonIndex = i
+                    }, label: {
+                        RoundedRectangle(cornerRadius: /*@START_MENU_TOKEN@*/25.0/*@END_MENU_TOKEN@*/)
+                            .frame(width: 350, height: 190, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+    //                        .foregroundColor(.clear)
+                            .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+    //                        .background(LinearGradient(gradient: Gradient(colors: [Color.yellow.opacity(0.7), Color.init(red: 0.6, green: 0.0, blue: 0.1).opacity(0.85)]), startPoint: .top, endPoint: .bottom)
+    //                        )
+                            .overlay(
+                                VStack{
+                                    HStack{
+                                        Text("\(notesList.notes[i].noteDate)")
+                                            .bold()
+                                            .foregroundColor(.white)
+                                            .font(.system(size: 15))
+                                            .shadow(radius: 1)
+                                            .padding()
+                                        
+                                        Spacer()
+                                            
+                                    }
+                                    HStack{
+                                        Text("\(notesList.notes[i].noteText)")
+                                            .foregroundColor(.primary)
+                                            .padding(.horizontal)
+                                        Spacer()
+                                    }
                                     
                                     Spacer()
-                                        
                                 }
-                                HStack{
-                                    Text("\(notesList.notes[i].noteText)")
-                                        .padding(.horizontal)
-                                    Spacer()
-                                }
-                                
-                                Spacer()
-                            }
-                            
-                        )
-                        .cornerRadius(25)
-                        .shadow(color: .gray /*Color.red.opacity(0.7)*/,radius: 15, x: 0, y: 10)
-                        .padding()
+                            )
+                            .cornerRadius(25)
+                            .shadow(color: .gray /*Color.red.opacity(0.7)*/,radius: 15, x: 0, y: 10)
+                            .padding()
+                    })
                 }
                 .padding(.top)
                 
@@ -233,18 +239,10 @@ struct ContentView: View {
                         Spacer()
                         
                         Button(action: {
-//                            notesList.notes.append(notesList)
-                            
-                            notesList.notes.append(Note(text: text, date: "date"))
-//                            print(notesList.notes[notesList.notes.count-1].noteText)
-                            notesList.save()
-//                            allNotes.append(Note(noteText: text))
+                            editingNotesList()
 //                            offset.height = .zero
                             isModal = false
                             text = "Start Note..."
-//                            for i in 0..<allNotes.count{
-//                                print("\(i): \(allNotes[i].noteText)")
-//                            }
                         }, label: {
                             Text("Done")
                                 .bold()
@@ -307,6 +305,14 @@ struct ContentView: View {
         }
         else{
             return false
+        }
+    }
+    
+    private func editingNotesList(){
+        if(text != notesList.notes[selectedButtonIndex].noteText){
+            notesList.notes.remove(at: self.selectedButtonIndex)
+            notesList.notes.append(Note(text: text, date: "date"))
+            notesList.save()
         }
     }
 }
