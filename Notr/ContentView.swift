@@ -7,10 +7,6 @@
 
 import SwiftUI
 
-//struct Note : Identifiable{
-//    var id = UUID()
-//    let noteText: String
-//}
 struct ContentView: View {
     
     @State private var text = "Start Note..."
@@ -25,7 +21,6 @@ struct ContentView: View {
     @State private var offset = CGSize.zero
     @State private var selectedButtonIndex = 0
     
-//    @State private var allNotes = [Note]()
     var notesList = Notes()
     
     var body: some View {
@@ -169,6 +164,7 @@ struct ContentView: View {
     private var header : some View{
         BlurView(style: .systemUltraThinMaterial)
             .frame(width: UIScreen.main.bounds.width, height: checkHeaderHeight(contentOffset: scrollContentOffset))
+            .shadow(radius: 5)
             .overlay(
                 HStack{
                     VStack{
@@ -203,7 +199,6 @@ struct ContentView: View {
                     }
                 }
             )
-            .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
             .animation(.easeInOut(duration: 0))
     }
     
@@ -223,7 +218,6 @@ struct ContentView: View {
                         }
                         else{
                             self.offset.height = .zero
-//                            isModal = false
                         }
                     }
             )
@@ -240,6 +234,9 @@ struct ContentView: View {
                         
                         Button(action: {
                             editingNotesList()
+                            notesList.notes.sort{
+                                $0.noteDate > $1.noteDate
+                            }
 //                            offset.height = .zero
                             isModal = false
                             text = "Start Note..."
@@ -311,9 +308,13 @@ struct ContentView: View {
     private func editingNotesList(){
         if(text != notesList.notes[selectedButtonIndex].noteText){
             notesList.notes.remove(at: self.selectedButtonIndex)
-            notesList.notes.append(Note(text: text, date: "date"))
-            notesList.save()
+            addNote(textNote: text)
         }
+    }
+    
+    private func addNote(textNote: String){
+        notesList.notes.append(Note(text: textNote, date: "date"))
+        notesList.save()
     }
 }
 

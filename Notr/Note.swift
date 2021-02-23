@@ -42,7 +42,7 @@ class Notes : ObservableObject{
         let date = DateFormatter()
         
         date.dateStyle = .medium
-        date.timeStyle = .short
+        date.timeStyle = .medium
         date.locale = Locale.current
         
         return date.string(from: Date())
