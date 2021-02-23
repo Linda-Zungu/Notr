@@ -75,10 +75,10 @@ struct ContentView: View {
                 }
                 .padding(.top)
                 
-                TextField("Search Notr...", text: .constant("placeholder"))
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .padding()
-                    .padding(.bottom, 45)
+//                TextField("Search Notr...", text: .constant("placeholder"))
+//                    .textFieldStyle(RoundedBorderTextFieldStyle())
+//                    .padding()
+//                    .padding(.bottom, 45)
 
             }
 //            .padding(.top, 50)
@@ -171,30 +171,36 @@ struct ContentView: View {
                 HStack{
                     VStack{
                         HStack{
-                            Text(isScrollPositionChanged(contentOffset: self.scrollContentOffset) ? "Notes" : "")
+//                            Text(isScrollPositionChanged(contentOffset: self.scrollContentOffset) ? "Notes" : "")
+                            Text("Note")
                                 .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
                                 .bold()
                                 .padding(.top, 40)
                                 .padding(.horizontal)
                                 .animation(.easeInOut(duration: 0.25))
+                                .opacity((-Double(scrollContentOffset)+30)/(30))
                             
                             Spacer()
                             
                             Button(action: {}, label: {
-                                Text(isScrollPositionChanged(contentOffset: self.scrollContentOffset) ? "Remove" : "")
+//                                Text(isScrollPositionChanged(contentOffset: self.scrollContentOffset) ? "Remove" : "")
+                                Text("Remove")
                                     .padding(.top, 40)
                                     .padding(.horizontal)
                                     .animation(.easeInOut(duration: 0.25))
+                                    .opacity((-Double(scrollContentOffset)+30)/(30))
                             })
                         }
                         
                         HStack{
-                            Text(isScrollPositionChanged(contentOffset: self.scrollContentOffset) ? "\(getDate())" : "")
+//                            Text(isScrollPositionChanged(contentOffset: self.scrollContentOffset) ? "\(getDate())" : "")
+                            Text("\(getDate())")
                                 .bold()
                                 .foregroundColor(.gray)
                                 .padding(.bottom)
                                 .padding(.horizontal)
                                 .animation(.easeInOut(duration: 0.25))
+                                .opacity((-Double(scrollContentOffset)+30)/(30))
                                 
                             Spacer()
                         }
@@ -321,7 +327,6 @@ struct ContentView: View {
                 if(text != "" && text != notesList.notes[selectedButtonIndex].noteText){
                     addNote(textNote: text)
                 }
-                
             }
         }
     }
