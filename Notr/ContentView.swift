@@ -309,16 +309,19 @@ struct ContentView: View {
     }
     
     private func editingNotesList(){
-        if(notesList.notes.isEmpty){
+        if(notesList.notes.isEmpty && text != ""){
             addNote(textNote: text)
         }
         else{
-            if(text != notesList.notes[selectedButtonIndex].noteText && isEditing == true){
+            if(text != "" && text != notesList.notes[selectedButtonIndex].noteText && isEditing == true){
                 notesList.notes.remove(at: self.selectedButtonIndex)
                 addNote(textNote: text)
             }
             else{
-                addNote(textNote: text)
+                if(text != "" && text != notesList.notes[selectedButtonIndex].noteText){
+                    addNote(textNote: text)
+                }
+                
             }
         }
     }
