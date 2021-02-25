@@ -22,6 +22,8 @@ struct ContentView: View {
     @State private var offset = CGSize.zero
     @State private var selectedButtonIndex = 0
     
+    @State private var delete = false
+    
     var notesList = Notes()
     
     var body: some View {
@@ -31,7 +33,6 @@ struct ContentView: View {
 //                            .padding(.top, 80)
                 Spacer(minLength: 50)
                 
-//                ForEach(0..<29){ i in
                 ForEach(0..<notesList.notes.count, id: \.self) { i in
                     Button(action: {
                         self.isModal = true
@@ -39,38 +40,67 @@ struct ContentView: View {
                         self.text = notesList.notes[i].noteText
                         self.selectedButtonIndex = i
                     }, label: {
-                        RoundedRectangle(cornerRadius: /*@START_MENU_TOKEN@*/25.0/*@END_MENU_TOKEN@*/)
-                            .frame(width: 350, height: 190, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
-    //                        .foregroundColor(.clear)
-                            .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
-    //                        .background(LinearGradient(gradient: Gradient(colors: [Color.yellow.opacity(0.7), Color.init(red: 0.6, green: 0.0, blue: 0.1).opacity(0.85)]), startPoint: .top, endPoint: .bottom)
-    //                        )
-                            .overlay(
-                                VStack{
-                                    HStack{
-                                        Text("\(notesList.notes[i].noteDate)")
-                                            .bold()
-                                            .foregroundColor(.white)
-                                            .font(.system(size: 15))
-                                            .shadow(radius: 1)
-                                            .padding()
-                                        
-                                        Spacer()
+                        ZStack{
+                            RoundedRectangle(cornerRadius: /*@START_MENU_TOKEN@*/25.0/*@END_MENU_TOKEN@*/)
+                                .frame(width: 350, height: 190, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                                .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+                                .overlay(
+                                    VStack{
+                                        HStack{
+                                            Text("\(notesList.notes[i].noteDate)")
+                                                .bold()
+                                                .foregroundColor(.white)
+                                                .font(.system(size: 15))
+                                                .shadow(radius: 1)
+                                                .padding()
                                             
-                                    }
-                                    HStack{
-                                        Text("\(notesList.notes[i].noteText)")
-                                            .foregroundColor(.primary)
-                                            .padding(.horizontal)
+                                            Spacer()
+                                                
+                                        }
+                                        HStack{
+                                            Text("\(notesList.notes[i].noteText)")
+                                                .foregroundColor(.primary)
+                                                .padding(.horizontal)
+                                            Spacer()
+                                        }
+                                        
                                         Spacer()
                                     }
                                     
+                                )
+                                .animation(.spring())
+                                .cornerRadius(25)
+                                .shadow(color: .gray /*Color.red.opacity(0.7)*/,radius: 15, x: 0, y: 10)
+                                .padding()
+                            
+                            HStack{
+                                Spacer()
+                                VStack{
+                                    Button(action: {
+                                        if(delete == true){
+                                            self.selectedButtonIndex = i
+                                            notesList.notes.remove(at: selectedButtonIndex)
+                                            notesList.save()
+                                        }
+                                    }, label: {
+                                        RoundedRectangle(cornerRadius: /*@START_MENU_TOKEN@*/25.0/*@END_MENU_TOKEN@*/)
+                                            .frame(width: 50, height: 50, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                                            .foregroundColor(.red)
+                                            .overlay(
+                                                Image(systemName: "trash")
+                                                    .foregroundColor(.white)
+                                                    .shadow(radius: 1)
+                                            )
+                                            .offset(x: -10, y: 5)
+                                            .opacity(delete ? 0.8 : 0)
+                                            .animation(.spring())
+                                            .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
+                                    })
+                                    
                                     Spacer()
                                 }
-                            )
-                            .cornerRadius(25)
-                            .shadow(color: .gray /*Color.red.opacity(0.7)*/,radius: 15, x: 0, y: 10)
-                            .padding()
+                            }
+                        }
                     })
                 }
                 .padding(.top)
@@ -157,8 +187,6 @@ struct ContentView: View {
                 .animation(.spring())
                 .edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
                 .shadow(radius: 30)
-                
-                
         }
     }
     
@@ -171,35 +199,34 @@ struct ContentView: View {
                 HStack{
                     VStack{
                         HStack{
-//                            Text(isScrollPositionChanged(contentOffset: self.scrollContentOffset) ? "Notes" : "")
                             Text("Note")
                                 .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
                                 .bold()
                                 .padding(.top, 40)
                                 .padding(.horizontal)
-                                .animation(.easeInOut(duration: 0.25))
+//                                .animation(.easeInOut(duration: 0.25))
                                 .opacity((-Double(scrollContentOffset)+30)/(30))
                             
                             Spacer()
                             
-                            Button(action: {}, label: {
-//                                Text(isScrollPositionChanged(contentOffset: self.scrollContentOffset) ? "Remove" : "")
-                                Text("Remove")
+                            Button(action: {
+                                delete.toggle()
+                            }, label: {
+                                Text(delete ? "Done" : "Remove")
                                     .padding(.top, 40)
                                     .padding(.horizontal)
-                                    .animation(.easeInOut(duration: 0.25))
+//                                    .animation(.easeInOut(duration: 0.25))
                                     .opacity((-Double(scrollContentOffset)+30)/(30))
                             })
                         }
                         
                         HStack{
-//                            Text(isScrollPositionChanged(contentOffset: self.scrollContentOffset) ? "\(getDate())" : "")
                             Text("\(getDate())")
                                 .bold()
                                 .foregroundColor(.gray)
                                 .padding(.bottom)
                                 .padding(.horizontal)
-                                .animation(.easeInOut(duration: 0.25))
+//                                .animation(.easeInOut(duration: 0.25))
                                 .opacity((-Double(scrollContentOffset)+30)/(30))
                                 
                             Spacer()
@@ -262,17 +289,17 @@ struct ContentView: View {
     
     
     //MARK: Functions
-    private func isScrollPositionChanged(contentOffset:CGFloat) -> Bool{
-        if(contentOffset == 0){
-            return true
-        }
-        else if(contentOffset > 30){
-            return false
-        }
-        else{
-            return true
-        }
-    }
+//    private func isScrollPositionChanged(contentOffset:CGFloat) -> Bool{
+//        if(contentOffset == 0){
+//            return true
+//        }
+//        else if(contentOffset > 30){
+//            return false
+//        }
+//        else{
+//            return true
+//        }
+//    }
     
     private func checkHeaderHeight(contentOffset : CGFloat) -> CGFloat{
         if(contentOffset == 0){
