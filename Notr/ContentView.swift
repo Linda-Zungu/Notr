@@ -41,38 +41,7 @@ struct ContentView: View {
                         self.selectedButtonIndex = i
                     }, label: {
                         ZStack{
-                            RoundedRectangle(cornerRadius: /*@START_MENU_TOKEN@*/25.0/*@END_MENU_TOKEN@*/)
-                                .frame(width: 350, height: 190, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
-                                .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
-                                .overlay(
-                                    VStack{
-                                        HStack{
-                                            Text("\(notesList.notes[i].noteDate)")
-                                                .bold()
-                                                .foregroundColor(.white)
-                                                .font(.system(size: 15))
-                                                .shadow(radius: 1)
-                                                .padding()
-                                            
-                                            Spacer()
-                                                
-                                        }
-                                        HStack{
-                                            Text("\(notesList.notes[i].noteText)")
-                                                .foregroundColor(.primary)
-                                                .padding(.horizontal)
-                                            Spacer()
-                                        }
-                                        
-                                        Spacer()
-                                    }
-                                    
-                                )
-                                .animation(.spring())
-                                .cornerRadius(25)
-                                .shadow(color: .gray /*Color.red.opacity(0.7)*/,radius: 15, x: 0, y: 10)
-                                .padding()
-                            
+                            NoteCardView(notesList: notesList, i: i)
                             HStack{
                                 Spacer()
                                 VStack{
@@ -111,32 +80,12 @@ struct ContentView: View {
 //                    .padding(.bottom, 45)
 
             }
-//            .padding(.top, 50)
-//            .ignoresSafeArea(/*@START_MENU_TOKEN@*/.keyboard/*@END_MENU_TOKEN@*/, edges: /*@START_MENU_TOKEN@*/.bottom/*@END_MENU_TOKEN@*/)
-//            .edgesIgnoringSafeArea(.top)
             
             VStack{
                 Spacer()
                 HStack{
                     Spacer()
-                    Button(action: {
-                        isModal = true
-                    }, label: {
-                        BlurView(style: .systemUltraThinMaterial)
-                            .frame(width: 70, height: 70, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
-                            .cornerRadius(35)
-                            .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/, x: 0, y: 5)
-                            .padding()
-                            .offset(x: -4, y: 0)
-                            .overlay(
-                                Image(systemName: "plus")
-                                    .offset(x: -4, y: 0)
-                                    .font(.system(size: 30))
-                                    .foregroundColor(.orange)
-                            )
-                            
-                    })
-                    .animation(.spring(response: 0.3, dampingFraction: 0.63, blendDuration: 0.3))
+                    addNewNoteButton
                 }
             }
             .edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
@@ -204,7 +153,6 @@ struct ContentView: View {
                                 .bold()
                                 .padding(.top, 40)
                                 .padding(.horizontal)
-//                                .animation(.easeInOut(duration: 0.25))
                                 .opacity((-Double(scrollContentOffset)+30)/(30))
                             
                             Spacer()
@@ -215,7 +163,6 @@ struct ContentView: View {
                                 Text(delete ? "Done" : "Remove")
                                     .padding(.top, 40)
                                     .padding(.horizontal)
-//                                    .animation(.easeInOut(duration: 0.25))
                                     .opacity((-Double(scrollContentOffset)+30)/(30))
                             })
                         }
@@ -226,7 +173,6 @@ struct ContentView: View {
                                 .foregroundColor(.gray)
                                 .padding(.bottom)
                                 .padding(.horizontal)
-//                                .animation(.easeInOut(duration: 0.25))
                                 .opacity((-Double(scrollContentOffset)+30)/(30))
                                 
                             Spacer()
@@ -272,7 +218,6 @@ struct ContentView: View {
                             notesList.notes.sort{
                                 $0.noteDate > $1.noteDate
                             }
-//                            offset.height = .zero
                             isModal = false
                             text = "Start Note..."
                             self.isEditing = false
@@ -287,20 +232,29 @@ struct ContentView: View {
             )
     }
     
+    private var addNewNoteButton : some View {
+        Button(action: {
+            isModal = true
+        }, label: {
+            BlurView(style: .systemUltraThinMaterial)
+                .frame(width: 70, height: 70, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                .cornerRadius(35)
+                .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/, x: 0, y: 5)
+                .padding()
+                .offset(x: -4, y: 0)
+                .overlay(
+                    Image(systemName: "plus")
+                        .offset(x: -4, y: 0)
+                        .font(.system(size: 30))
+                        .foregroundColor(.orange)
+                )
+                
+        })
+        .animation(.spring(response: 0.3, dampingFraction: 0.63, blendDuration: 0.3))
+    }
+    
     
     //MARK: Functions
-//    private func isScrollPositionChanged(contentOffset:CGFloat) -> Bool{
-//        if(contentOffset == 0){
-//            return true
-//        }
-//        else if(contentOffset > 30){
-//            return false
-//        }
-//        else{
-//            return true
-//        }
-//    }
-    
     private func checkHeaderHeight(contentOffset : CGFloat) -> CGFloat{
         if(contentOffset == 0){
             return 109
