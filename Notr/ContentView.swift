@@ -10,6 +10,7 @@ import SwiftUI
 struct ContentView: View {
     
     @State private var text = "Start Note..."
+    @State private var searchText = "" //Add later
     init(){
         UITextView.appearance().backgroundColor = .clear
         UITextView.appearance().contentInset = .init(top: 120, left: 0, bottom: 350, right: 0)
@@ -21,7 +22,6 @@ struct ContentView: View {
     @State private var isEditing = false
     @State private var offset = CGSize.zero
     @State private var selectedButtonIndex = 0
-    
     @State private var delete = false
     
     var notesList = Notes()
@@ -31,8 +31,13 @@ struct ContentView: View {
             TrackableScrollView(.vertical, showIndicators: true, contentOffset: $scrollContentOffset){
 //                Text("\(self.scrollContentOffset)")
 //                            .padding(.top, 80)
+                
                 Spacer(minLength: 50)
                 
+//                TextField("Search Notr...", text: $searchText)
+//                    .textFieldStyle(RoundedBorderTextFieldStyle())
+//                    .padding()
+//                    .padding(.top, 15)
                 ForEach(0..<notesList.notes.count, id: \.self) { i in
                     Button(action: {
                         self.isModal = true
@@ -73,12 +78,6 @@ struct ContentView: View {
                     })
                 }
                 .padding(.top)
-                
-//                TextField("Search Notr...", text: .constant("placeholder"))
-//                    .textFieldStyle(RoundedBorderTextFieldStyle())
-//                    .padding()
-//                    .padding(.bottom, 45)
-
             }
             
             VStack{
