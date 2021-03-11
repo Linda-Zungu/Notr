@@ -110,6 +110,7 @@ struct ContentView: View {
                                         if self.text == "Start Note..." {
                                             self.text = ""
                                         }
+                                        if(isEditing == true){}
                                     }
                                 }
                                 
@@ -195,6 +196,7 @@ struct ContentView: View {
                         if(self.offset.height > 100) {
                             offset.height = .zero
                             isModal = false
+                            UIApplication.shared.endEditing()//Dismissing the keyboard
                         }
                         else{
                             self.offset.height = .zero
@@ -220,6 +222,7 @@ struct ContentView: View {
                             isModal = false
                             text = "Start Note..."
                             self.isEditing = false
+                            UIApplication.shared.endEditing()//Dismissing the keyboard
                         }, label: {
                             Text("Done")
                                 .bold()
@@ -314,6 +317,12 @@ struct ContentView: View {
     private func addNote(textNote: String){
         notesList.notes.append(Note(text: textNote, date: "date"))
         notesList.save()
+    }
+}
+
+extension UIApplication {//To dismiss the keyboard
+    func endEditing() {
+        sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 }
 
