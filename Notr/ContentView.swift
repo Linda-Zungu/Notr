@@ -222,7 +222,7 @@ struct ContentView: View {
                             isModal = false
                             text = "Start Note..."
                             self.isEditing = false
-                            UIApplication.shared.endEditing()//Dismissing the keyboard
+                            UIApplication.shared.endEditing()//Dismissing the keyboard 
                         }, label: {
                             Text("Done")
                                 .bold()
